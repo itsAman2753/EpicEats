@@ -28,6 +28,7 @@ app.get("/health", async (req: Request, res: Response) => {
 
 app.use("/api/my/user",myUserRoute);
 app.use("/api/my/restaurant", myRestaurantRoute);
+app.use("/api/restaurant",myRestaurantRoute);
 
 
 
