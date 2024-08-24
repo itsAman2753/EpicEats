@@ -92,4 +92,4 @@ const CuisineFilter = ({
   );
 };
 
-export default CuisineFilter; 
+export default CuisineFilter;

@@ -6,19 +6,23 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useGetRestaurant = (restaurantId?: string) => {
   const getRestaurantByIdRequest = async (): Promise<Restaurant> => {
-    const response = await fetch(
-      `${API_BASE_URL}/api/restaurant/${restaurantId}`
-    );
+    if (!restaurantId) throw new Error("Restaurant ID is required");
 
+    const response = await fetch(`${API_BASE_URL}/api/restaurant/${restaurantId}`);
+    
     if (!response.ok) {
       throw new Error("Failed to get restaurant");
     }
 
-    return response.json();
+    try {
+      return await response.json();
+    } catch (error) {
+      throw new Error("Failed to parse response as JSON");
+    }
   };
 
   const { data: restaurant, isLoading } = useQuery(
-    "fetchRestaurant",
+    ["fetchRestaurant", restaurantId],
     getRestaurantByIdRequest,
     {
       enabled: !!restaurantId,
@@ -33,6 +37,8 @@ export const useSearchRestaurants = (
   city?: string
 ) => {
   const createSearchRequest = async (): Promise<RestaurantSearchResponse> => {
+    if (!city) throw new Error("City is required");
+
     const params = new URLSearchParams();
     params.set("searchQuery", searchState.searchQuery);
     params.set("page", searchState.page.toString());
@@ -47,11 +53,15 @@ export const useSearchRestaurants = (
       throw new Error("Failed to get restaurant");
     }
 
-    return response.json();
+    try {
+      return await response.json();
+    } catch (error) {
+      throw new Error("Failed to parse response as JSON");
+    }
   };
 
   const { data: results, isLoading } = useQuery(
-    ["searchRestaurants", searchState],
+    ["searchRestaurants", searchState, city],
     createSearchRequest,
     { enabled: !!city }
   );

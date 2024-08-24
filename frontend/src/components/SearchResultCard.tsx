@@ -29,7 +29,7 @@ const SearchResultCard = ({ restaurant }: Props) => {
               <span className="flex">
                 <span>{item}</span>
                 {index < restaurant.cuisines.length - 1 && <Dot />}
-              </span> 
+              </span>
             ))}
           </div>
           <div className="flex gap-2 flex-col">
